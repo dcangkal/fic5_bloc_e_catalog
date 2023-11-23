@@ -53,37 +53,101 @@ class _HomePageState extends State<HomePage> {
       body: BlocBuilder<ProductsBloc, ProductsState>(builder: (context, state) {
         if (state is ProductsLoaded) {
           debugPrint('total data : ${state.data.length}');
-          return ListView.builder(
-              controller: scrollController,
-              // reverse: true,
-              itemCount:
-                  state.isNext ? state.data.length + 1 : state.data.length,
-              itemBuilder: (context, index) {
-                if (state.isNext && index == state.data.length) {
-                  return const Card(
-                    child: Center(
-                      child: CircularProgressIndicator(),
-                    ),
-                  );
-                }
-                return InkWell(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            DetailProductPage(id: state.data[index].id ?? 0),
-                      ),
-                    );
-                  },
-                  child: Card(
-                    child: ListTile(
-                      title: Text(state.data[index].title ?? '-'),
-                      subtitle: Text('\$ ${state.data[index].price}'),
-                    ),
+          return GridView.builder(
+            padding: const EdgeInsets.all(10),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              childAspectRatio: 1.0 / 1.4,
+              crossAxisCount: 2,
+              mainAxisSpacing: 8,
+              crossAxisSpacing: 8,
+            ),
+            itemCount: state.isNext ? state.data.length + 1 : state.data.length,
+            controller: scrollController,
+            shrinkWrap: true,
+            physics: const ScrollPhysics(),
+            itemBuilder: (BuildContext context, int index) {
+              if (state.isNext && index == state.data.length) {
+                return const Card(
+                  child: Center(
+                    child: CircularProgressIndicator(),
                   ),
                 );
-              });
+              }
+              var item = state.data[index];
+              return InkWell(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          DetailProductPage(id: state.data[index].id ?? 0),
+                    ),
+                  );
+                },
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        clipBehavior: Clip.antiAlias,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: NetworkImage(
+                              item.images![0],
+                            ),
+                            fit: BoxFit.cover,
+                          ),
+                          borderRadius: const BorderRadius.all(
+                            Radius.circular(
+                              6.0,
+                            ),
+                          ),
+                        ),
+                        child: const Stack(
+                          children: [
+                            Positioned(
+                              right: 6.0,
+                              top: 8.0,
+                              child: CircleAvatar(
+                                radius: 14.0,
+                                backgroundColor: Colors.white,
+                                child: Icon(
+                                  Icons.favorite,
+                                  color: Colors.red,
+                                  size: 14.0,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 8.0,
+                    ),
+                    Text(
+                      item.title!,
+                      style: const TextStyle(
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 4.0,
+                    ),
+                    Text(
+                      "\$ ${item.price}",
+                      style: const TextStyle(
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
+          );
         }
         return const Center(
           child: CircularProgressIndicator(),

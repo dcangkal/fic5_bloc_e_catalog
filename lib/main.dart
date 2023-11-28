@@ -1,10 +1,12 @@
 import 'package:fic_5/bloc/add_product/add_product_bloc.dart';
+import 'package:fic_5/bloc/categories/categories_cubit.dart';
 import 'package:fic_5/bloc/detail_product/detail_product_bloc.dart';
 import 'package:fic_5/bloc/login/login_bloc.dart';
 import 'package:fic_5/bloc/products/products_bloc.dart';
 import 'package:fic_5/bloc/register/register_bloc.dart';
 import 'package:fic_5/bloc/update_product/update_product_bloc.dart';
 import 'package:fic_5/data/datasources/auth_datasources.dart';
+import 'package:fic_5/data/datasources/categories_datasource.dart';
 import 'package:fic_5/data/datasources/product_datasources.dart';
 import 'package:fic_5/presentation/login_page.dart';
 import 'package:flutter/material.dart';
@@ -38,6 +40,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => UpdateProductBloc(ProductDatasource()),
+        ),
+        BlocProvider(
+          create: (context) => CategoriesCubit(CategoriesDatasource()),
         ),
       ],
       child: MaterialApp(

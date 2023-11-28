@@ -2,6 +2,7 @@
 import 'package:fic_5/bloc/detail_product/detail_product_bloc.dart';
 import 'package:fic_5/bloc/update_product/update_product_bloc.dart';
 import 'package:fic_5/data/models/request/product_request_model.dart';
+import 'package:fic_5/presentation/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -44,6 +45,7 @@ class _DetailProductPageState extends State<DetailProductPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        elevation: 2,
         title: Text("Detail Product ${widget.id}"),
         actions: const [],
       ),
@@ -57,6 +59,7 @@ class _DetailProductPageState extends State<DetailProductPage> {
                 return Column(
                   children: [
                     Container(
+                      width: double.infinity,
                       margin: const EdgeInsets.all(16),
                       padding: const EdgeInsets.all(16),
                       decoration: const BoxDecoration(
@@ -193,7 +196,11 @@ class _DetailProductPageState extends State<DetailProductPage> {
                                 titleController!.clear();
                                 descriptionController!.clear();
                                 priceController!.clear();
-                                Navigator.pop(context);
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => const HomePage()),
+                                );
                               }
                               if (state is UpdateProductError) {
                                 ScaffoldMessenger.of(context).showSnackBar(
